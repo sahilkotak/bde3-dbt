@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "dbt-airflow"
+version = "0.1.0"
+description = "Building ELT data pipelines with Airflow"
+authors = ["sahilkotak <40324523+sahilkotak@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "dbt_airflow"}]
+
+[tool.poetry.dependencies]
+python = "3.11.2"
+dbt-postgres = "^1.6.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
