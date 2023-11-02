@@ -9,12 +9,10 @@ models:
         tests:
           - unique
           - not_null
-
       - name: host_name
         description: "Name of the host"
         tests:
           - not_null
-
       - name: scraped_date
         description: "Date when the data was scraped"
         tests:
@@ -28,12 +26,10 @@ models:
         tests:
           - unique
           - not_null
-
       - name: room_type
         description: "Type of room"
         tests:
           - not_null
-
       - name: scraped_date
         description: "Date when the data was scraped"
         tests:
@@ -47,12 +43,10 @@ models:
         tests:
           - unique
           - not_null
-
       - name: property_type
         description: "Type of property"
         tests:
           - not_null
-
       - name: scraped_date
         description: "Date when the data was scraped"
         tests:
@@ -66,12 +60,11 @@ models:
         tests:
           - unique
           - not_null
-
       - name: scraped_date
         description: "Date when the data was scraped"
         tests:
           - not_null
-  
+
   - name: stg_census_lga_g01
     description: "Staging table for census data grouped by LGA code"
     columns:
@@ -115,12 +108,83 @@ models:
         tests:
           - not_null
 
+  - name: dim_census_g01
+    description: "Dimension table for detailed census data by LGA for 2016."
+    columns:
+      - name: lga_code_2016
+        description: "Unique identifier for the LGA in 2016."
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_census_g02
+    description: "Dimension table for census median values and averages by LGA for 2016."
+    columns:
+      - name: lga_code_2016
+        description: "Unique identifier for the LGA in 2016."
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_host
+    description: "Dimension table for host information."
+    columns:
+      - name: host_id
+        description: "Unique identifier for the host."
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_lga
+    description: "Dimension table for Local Government Area information."
+    columns:
+      - name: lga_code
+        description: "Unique code identifier for the LGA."
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_property_type
+    description: "Dimension table for types of properties."
+    columns:
+      - name: property_type
+        description: "Description of the property type."
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_room_type
+    description: "Dimension table for types of rooms."
+    columns:
+      - name: room_type_id
+        description: "Description of the room type."
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_suburbs
+    description: "Dimension table for suburb information."
+    columns:
+      - name: suburb_name
+        description: "Name of the suburb."
+        tests:
+          - unique
+          - not_null
+
+  - name: facts_listings
+    description: "Fact table combining listing details with host and LGA information."
+    columns:
+      - name: listing_id
+        description: "The unique identifier for the listing."
+        tests:
+          - unique
+          - not_null
+
 sources:
   - name: raw
     description: Raw data from CSV files
     database: postgres
     schema: raw
-
     tables:
       - name: census_lga_g01
         description: "Census data by LGA for 2016, capturing population count by age, gender, indigenous status, birthplace, language spoken at home, education, and housing."
