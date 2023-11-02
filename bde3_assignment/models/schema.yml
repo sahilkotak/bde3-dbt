@@ -1,0 +1,136 @@
+version: 2
+
+models:
+  - name: stg_host
+    description: "Staging table for host data"
+    columns:
+      - name: host_id
+        description: "Unique identifier for the host"
+        tests:
+          - unique
+          - not_null
+
+      - name: host_name
+        description: "Name of the host"
+        tests:
+          - not_null
+
+      - name: scraped_date
+        description: "Date when the data was scraped"
+        tests:
+          - not_null
+
+  - name: stg_room
+    description: "Staging table for room data"
+    columns:
+      - name: listing_id
+        description: "Unique identifier for the listing"
+        tests:
+          - unique
+          - not_null
+
+      - name: room_type
+        description: "Type of room"
+        tests:
+          - not_null
+
+      - name: scraped_date
+        description: "Date when the data was scraped"
+        tests:
+          - not_null
+
+  - name: stg_property
+    description: "Staging table for property data"
+    columns:
+      - name: listing_id
+        description: "Unique identifier for the listing"
+        tests:
+          - unique
+          - not_null
+
+      - name: property_type
+        description: "Type of property"
+        tests:
+          - not_null
+
+      - name: scraped_date
+        description: "Date when the data was scraped"
+        tests:
+          - not_null
+
+  - name: stg_reviews
+    description: "Staging table for reviews data"
+    columns:
+      - name: listing_id
+        description: "Unique identifier for the listing"
+        tests:
+          - unique
+          - not_null
+
+      - name: scraped_date
+        description: "Date when the data was scraped"
+        tests:
+          - not_null
+  
+  - name: stg_census_lga_g01
+    description: "Staging table for census data grouped by LGA code"
+    columns:
+      - name: lga_code_2016
+        description: "Unique identifier for the LGA in 2016"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_census_lga_g02
+    description: "Staging table for census data focusing on median values and averages"
+    columns:
+      - name: lga_code_2016
+        description: "Unique identifier for the LGA in 2016"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_nsw_lga_code
+    description: "Staging table for NSW LGA codes"
+    columns:
+      - name: lga_code
+        description: "Unique code identifier for the LGA"
+        tests:
+          - unique
+          - not_null
+      - name: lga_name
+        description: "Name of the LGA"
+        tests:
+          - not_null
+
+  - name: stg_nsw_lga_suburb
+    description: "Staging table for mapping between LGA names and suburbs"
+    columns:
+      - name: lga_name
+        description: "Name of the LGA"
+        tests:
+          - not_null
+      - name: suburb_name
+        description: "Name of the suburb associated with the LGA"
+        tests:
+          - not_null
+
+sources:
+  - name: raw
+    description: Raw data from CSV files
+    database: postgres
+    schema: raw
+
+    tables:
+      - name: census_lga_g01
+        description: "Census data by LGA for 2016, capturing population count by age, gender, indigenous status, birthplace, language spoken at home, education, and housing."
+      - name: census_lga_g02
+        description: "Census data by LGA focusing on median values and averages, such as median age, median income, and average household size."
+      - name: listings
+        description: "Data about property listings, possibly from a platform like Airbnb, including information about the host, property type, neighborhood, price, availability, and customer reviews."
+      - name: nsw_lga_code
+        description: "Mapping between LGA codes and their names in New South Wales."
+      - name: nsw_lga_suburb
+        description: "Associates suburbs with LGAs in New South Wales."
+      - name: host_snapshot
+        description: "snapshot"
