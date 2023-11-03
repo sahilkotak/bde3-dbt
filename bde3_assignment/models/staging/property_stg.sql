@@ -6,9 +6,9 @@ WITH ranked_data AS (
         "HOST_ID",
         "SCRAPED_DATE",
         dbt_scd_id,
-        dbt_updated_at,
-        dbt_valid_from,
-        dbt_valid_to
+        TO_DATE(dbt_updated_at, 'YYYY/MM/DD') AS dbt_updated_at,
+        TO_DATE(dbt_valid_from, 'YYYY/MM/DD') AS dbt_valid_from,
+        TO_DATE(dbt_valid_to, 'YYYY/MM/DD') AS dbt_valid_to
     FROM raw.property_snapshot
 )
 

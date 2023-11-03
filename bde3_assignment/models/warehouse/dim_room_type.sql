@@ -6,7 +6,7 @@ WITH room_changes AS (
         r.room_type,
         r.accommodates,
         r.dbt_valid_from,
-        COALESCE(r.dbt_valid_to, '9999-12-31'::date) AS dbt_valid_to, -- Future date for active records
+        r.dbt_valid_to,
         r.scraped_date,
         r.dbt_scd_id,
         r.dbt_updated_at

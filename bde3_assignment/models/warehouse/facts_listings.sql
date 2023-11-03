@@ -13,9 +13,17 @@ WITH listing AS (
         rt.has_availability,
         rt.availability_30,
         rv.number_of_reviews,
-        rv.review_scores_rating
+        rv.review_scores_rating,
+        -- Include the SCD columns for property and room
+        p.dbt_valid_from AS property_valid_from,
+        p.dbt_valid_to AS property_valid_to,
+        rt.dbt_valid_from AS room_valid_from,
+        rt.dbt_valid_to AS room_valid_to
     FROM {{ ref('property_stg') }} AS p
-    INNER JOIN {{ ref('room_stg') }} AS rt ON p.listing_id = rt.listing_id
+    INNER JOIN {{ ref('room_stg') }} AS rt 
+        ON p.listing_id = rt.listing_id 
+        AND p.scraped_date >= rt.dbt_valid_from 
+        AND (p.scraped_date < rt.dbt_valid_to OR rt.dbt_valid_to IS NULL)
     INNER JOIN {{ ref('reviews_stg') }} AS rv ON p.listing_id = rv.listing_id
 ),
 host_dimension AS (
@@ -25,6 +33,9 @@ host_dimension AS (
         h.host_since,
         h.host_is_superhost,
         h.host_neighbourhood,
+        -- Include the SCD columns for host
+        h.dbt_valid_from AS host_valid_from,
+        h.dbt_valid_to AS host_valid_to,
         s.lga_name AS host_neighbourhood_lga_name,
         l.lga_code AS host_neighbourhood_lga_code
     FROM {{ ref('host_stg') }} AS h
@@ -33,12 +44,11 @@ host_dimension AS (
 ),
 neighbourhood_to_lga AS (
     SELECT
-        s.suburb_name,
-        l.lga_code,
-        l.lga_name
-    FROM {{ ref('nsw_lga_suburb_stg') }} AS s
-    INNER JOIN {{ ref('nsw_lga_code_stg') }} AS l ON s.lga_name = l.lga_name
+        lga_name,
+        lga_code
+    FROM {{ ref('nsw_lga_code_stg') }}
 )
+-- The final select should include the SCD columns for the fact table records
 SELECT
     li.listing_id,
     li.date,
@@ -58,7 +68,18 @@ SELECT
     li.has_availability,
     li.availability_30,
     li.number_of_reviews,
-    li.review_scores_rating
+    li.review_scores_rating,
+    -- Include the SCD columns in the select
+    li.property_valid_from,
+    li.property_valid_to,
+    li.room_valid_from,
+    li.room_valid_to,
+    -- Include the SCD columns for the host
+    hd.host_valid_from,
+    hd.host_valid_to
 FROM listing li
-LEFT JOIN host_dimension hd ON li.host_id = hd.host_id
-LEFT JOIN neighbourhood_to_lga n ON li.listing_neighbourhood = n.suburb_name
+LEFT JOIN host_dimension hd 
+    ON li.host_id = hd.host_id 
+    AND li.date >= hd.host_valid_from 
+    AND (li.date < hd.host_valid_to OR hd.host_valid_to IS NULL)
+LEFT JOIN neighbourhood_to_lga n ON li.listing_neighbourhood = n.lga_name

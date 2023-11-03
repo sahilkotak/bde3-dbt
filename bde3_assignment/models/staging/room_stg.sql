@@ -13,10 +13,9 @@ WITH room_changes AS (
         END AS scraped_date,
         -- Include your SCD tracking columns here
         "dbt_scd_id",
-        "dbt_updated_at",
-        "dbt_valid_from",
-        -- Handle potential nulls in dbt_valid_to
-        COALESCE(CAST("dbt_valid_to" AS TIMESTAMP), CURRENT_TIMESTAMP) AS dbt_valid_to
+        TO_DATE("dbt_updated_at", 'YYYY/MM/DD') AS dbt_updated_at,
+        TO_DATE("dbt_valid_from", 'YYYY/MM/DD') AS dbt_valid_from,
+        TO_DATE(dbt_valid_to, 'YYYY/MM/DD') AS dbt_valid_to
     FROM raw.room_snapshot
 )
 

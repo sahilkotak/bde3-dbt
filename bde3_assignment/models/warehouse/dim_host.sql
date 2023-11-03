@@ -3,6 +3,8 @@
 WITH host_data AS (
     SELECT
         host_id,
+        listing_id,
+        host_listing_key,
         host_name,
         host_since,
         host_is_superhost,
@@ -28,6 +30,8 @@ lga_code AS (
 )
 SELECT
     h.host_id,
+    h.listing_id,
+    h.host_listing_key,
     h.host_name,
     h.host_since,
     h.host_is_superhost,
