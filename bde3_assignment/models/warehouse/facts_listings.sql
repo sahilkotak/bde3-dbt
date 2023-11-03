@@ -14,9 +14,9 @@ WITH listing AS (
         rt.availability_30,
         rv.number_of_reviews,
         rv.review_scores_rating
-    FROM {{ ref('stg_property') }} AS p
-    INNER JOIN {{ ref('stg_room') }} AS rt ON p.listing_id = rt.listing_id
-    INNER JOIN {{ ref('stg_reviews') }} AS rv ON p.listing_id = rv.listing_id
+    FROM {{ ref('property_stg') }} AS p
+    INNER JOIN {{ ref('room_stg') }} AS rt ON p.listing_id = rt.listing_id
+    INNER JOIN {{ ref('reviews_stg') }} AS rv ON p.listing_id = rv.listing_id
 ),
 host_dimension AS (
     SELECT
@@ -27,17 +27,17 @@ host_dimension AS (
         h.host_neighbourhood,
         s.lga_name AS host_neighbourhood_lga_name,
         l.lga_code AS host_neighbourhood_lga_code
-    FROM {{ ref('stg_host') }} AS h
-    LEFT JOIN {{ ref('stg_nsw_lga_suburb') }} AS s ON h.host_neighbourhood = s.suburb_name
-    LEFT JOIN {{ ref('stg_nsw_lga_code') }} AS l ON s.lga_name = l.lga_name
+    FROM {{ ref('host_stg') }} AS h
+    LEFT JOIN {{ ref('nsw_lga_suburb_stg') }} AS s ON h.host_neighbourhood = s.suburb_name
+    LEFT JOIN {{ ref('nsw_lga_code_stg') }} AS l ON s.lga_name = l.lga_name
 ),
 neighbourhood_to_lga AS (
     SELECT
         s.suburb_name,
         l.lga_code,
         l.lga_name
-    FROM {{ ref('stg_nsw_lga_suburb') }} AS s
-    INNER JOIN {{ ref('stg_nsw_lga_code') }} AS l ON s.lga_name = l.lga_name
+    FROM {{ ref('nsw_lga_suburb_stg') }} AS s
+    INNER JOIN {{ ref('nsw_lga_code_stg') }} AS l ON s.lga_name = l.lga_name
 )
 SELECT
     li.listing_id,

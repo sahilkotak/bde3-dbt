@@ -7,20 +7,24 @@ WITH host_data AS (
         host_since,
         host_is_superhost,
         host_neighbourhood,
-        scraped_date
-    FROM {{ ref('stg_host') }}
+        scraped_date,
+        dbt_scd_id,
+        dbt_updated_at,
+        dbt_valid_from,
+        dbt_valid_to
+    FROM {{ ref('host_stg') }}
 ),
 suburb_to_lga AS (
     SELECT
         suburb_name,
         lga_name
-    FROM {{ ref('stg_nsw_lga_suburb') }}
+    FROM {{ ref('nsw_lga_suburb_stg') }}
 ),
 lga_code AS (
     SELECT
         lga_name AS lga_name_code,
         lga_code
-    FROM {{ ref('stg_nsw_lga_code') }}
+    FROM {{ ref('nsw_lga_code_stg') }}
 )
 SELECT
     h.host_id,
@@ -30,7 +34,11 @@ SELECT
     h.host_neighbourhood,
     s.lga_name AS host_neighbourhood_lga,
     l.lga_code AS host_neighbourhood_lga_code,
-    h.scraped_date
+    h.scraped_date,
+    h.dbt_scd_id,
+    h.dbt_updated_at,
+    h.dbt_valid_from,
+    h.dbt_valid_to
 FROM host_data h
 LEFT JOIN suburb_to_lga s ON h.host_neighbourhood = s.suburb_name
 LEFT JOIN lga_code l ON s.lga_name = l.lga_name_code

@@ -7,4 +7,4 @@ SELECT
     median_rent_weekly,
     median_tot_fam_inc_weekly,
     median_tot_hhd_inc_weekly
-FROM {{ ref('stg_census_lga_g02') }}
+FROM {{ ref('census_lga_g02_stg') }}

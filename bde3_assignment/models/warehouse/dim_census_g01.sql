@@ -38,4 +38,4 @@ SELECT
     age_85ov_m,
     age_85ov_f,
     age_85ov_p
-FROM {{ ref('stg_census_lga_g01') }}
+FROM {{ ref('census_lga_g01_stg') }}

@@ -1,3 +1,3 @@
 SELECT DISTINCT
     suburb_name
-FROM {{ ref('stg_nsw_lga_suburb') }}
+FROM {{ ref('nsw_lga_suburb_stg') }}

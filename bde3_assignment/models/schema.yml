@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_host
+  - name: host_stg
     description: "Staging table for host data"
     columns:
       - name: host_id
@@ -18,7 +18,7 @@ models:
         tests:
           - not_null
 
-  - name: stg_room
+  - name: room_stg
     description: "Staging table for room data"
     columns:
       - name: listing_id
@@ -35,7 +35,7 @@ models:
         tests:
           - not_null
 
-  - name: stg_property
+  - name: property_stg
     description: "Staging table for property data"
     columns:
       - name: listing_id
@@ -52,7 +52,7 @@ models:
         tests:
           - not_null
 
-  - name: stg_reviews
+  - name: reviews_stg
     description: "Staging table for reviews data"
     columns:
       - name: listing_id
@@ -65,7 +65,7 @@ models:
         tests:
           - not_null
 
-  - name: stg_census_lga_g01
+  - name: census_lga_g01_stg
     description: "Staging table for census data grouped by LGA code"
     columns:
       - name: lga_code_2016
@@ -74,7 +74,7 @@ models:
           - unique
           - not_null
 
-  - name: stg_census_lga_g02
+  - name: census_lga_g02_stg
     description: "Staging table for census data focusing on median values and averages"
     columns:
       - name: lga_code_2016
@@ -83,7 +83,7 @@ models:
           - unique
           - not_null
 
-  - name: stg_nsw_lga_code
+  - name: nsw_lga_code_stg
     description: "Staging table for NSW LGA codes"
     columns:
       - name: lga_code
@@ -96,7 +96,7 @@ models:
         tests:
           - not_null
 
-  - name: stg_nsw_lga_suburb
+  - name: nsw_lga_suburb_stg
     description: "Staging table for mapping between LGA names and suburbs"
     columns:
       - name: lga_name
@@ -122,15 +122,6 @@ models:
     columns:
       - name: lga_code_2016
         description: "Unique identifier for the LGA in 2016."
-        tests:
-          - unique
-          - not_null
-
-  - name: dim_host
-    description: "Dimension table for host information."
-    columns:
-      - name: host_id
-        description: "Unique identifier for the host."
         tests:
           - unique
           - not_null

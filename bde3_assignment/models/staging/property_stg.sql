@@ -1,9 +1,14 @@
 WITH ranked_data AS (
-    SELECT *,
-           ROW_NUMBER() OVER (
-               PARTITION BY "LISTING_ID" 
-               ORDER BY "SCRAPED_DATE" DESC
-           ) as row_num
+    SELECT
+        "LISTING_ID",
+        "PROPERTY_TYPE",
+        "LISTING_NEIGHBOURHOOD",
+        "HOST_ID",
+        "SCRAPED_DATE",
+        dbt_scd_id,
+        dbt_updated_at,
+        dbt_valid_from,
+        dbt_valid_to
     FROM raw.property_snapshot
 )
 
@@ -15,9 +20,12 @@ SELECT
     CASE 
         WHEN TO_DATE("SCRAPED_DATE", 'YYYY/MM/DD') <= CURRENT_DATE THEN TO_DATE("SCRAPED_DATE", 'YYYY/MM/DD')
         ELSE NULL 
-    END AS scraped_date
+    END AS scraped_date,
+    dbt_scd_id AS dbt_scd_id,
+    dbt_updated_at AS dbt_updated_at,
+    dbt_valid_from AS dbt_valid_from,
+    dbt_valid_to AS dbt_valid_to
 FROM ranked_data
 WHERE 
-    row_num = 1
-    AND "LISTING_ID" IS NOT NULL
+    "LISTING_ID" IS NOT NULL
     AND "HOST_ID" IS NOT NULL

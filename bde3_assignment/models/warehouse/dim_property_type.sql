@@ -5,7 +5,7 @@ WITH source_data AS (
         listing_id,
         property_type,
         MAX(scraped_date) as latest_scraped_date
-    FROM {{ ref('stg_property') }}
+    FROM {{ ref('property_stg') }}
     GROUP BY listing_id, property_type
 )
 
