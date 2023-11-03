@@ -8,7 +8,7 @@ WITH ranked_data AS (
 
 -- Select all columns from the ranked_data where the row_num is 1 (this filters out duplicates).
 SELECT 
-    lga_name,
-    suburb_name
+    INITCAP(lga_name) AS lga_name,
+    INITCAP(suburb_name) AS suburb_name
 FROM ranked_data
 WHERE row_num = 1
