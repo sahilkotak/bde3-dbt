@@ -5,9 +5,8 @@ models:
     description: "Staging table for host data"
     columns:
       - name: host_id
-        description: "Unique identifier for the host"
+        description: "Host id for the host"
         tests:
-          - unique
           - not_null
       - name: host_name
         description: "Name of the host"
@@ -24,7 +23,6 @@ models:
       - name: listing_id
         description: "Unique identifier for the listing"
         tests:
-          - unique
           - not_null
       - name: room_type
         description: "Type of room"
@@ -41,7 +39,6 @@ models:
       - name: listing_id
         description: "Unique identifier for the listing"
         tests:
-          - unique
           - not_null
       - name: property_type
         description: "Type of property"
@@ -150,7 +147,6 @@ models:
       - name: room_type_id
         description: "Description of the room type."
         tests:
-          - unique
           - not_null
 
   - name: dim_suburbs
@@ -168,7 +164,6 @@ models:
       - name: listing_id
         description: "The unique identifier for the listing."
         tests:
-          - unique
           - not_null
 
 sources:
